@@ -7,21 +7,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CloverClubRest.Services
 {
-    public class UsersRepository : IUsersRepository, IDisposable
+    public class UsersRepository : IUsersRepository
     {
         private readonly UsersContext _context;
 
         public UsersRepository(UsersContext ctx) => _context = ctx;
 
-        public IEnumerable<User> GetUsers()
-        {
-            return _context.User.ToList();
-        }
+        public IEnumerable<User> GetUsers() => _context.User.ToList();
 
-        public User GetUserById(int userId)
-        {
-            return _context.User.Find(userId);
-        }
+        public User GetUserById(int userId) => _context.User.Find(userId);
 
         public User InsertUser(User user)
         {
@@ -46,15 +40,9 @@ namespace CloverClubRest.Services
             return user;
         }
 
-        public User FindByEmail(string email)
-        {
-            return _context.User.FirstOrDefault(u => u.Email.Equals(email));
-        }
+        public User FindByEmail(string email) => _context.User.FirstOrDefault(u => u.Email.Equals(email));
 
-        public void Save()
-        {
-            _context.SaveChanges();
-        }
+        public void Save() => _context.SaveChanges();
 
         private bool disposed = false;
 

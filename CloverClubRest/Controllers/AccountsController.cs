@@ -17,6 +17,8 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CloverClubRest.Controllers
 {
+    //TODO SALT
+
     [Route("api/[controller]")]
     public class AccountsController : Controller
     {
@@ -29,6 +31,7 @@ namespace CloverClubRest.Controllers
             config = configuration;
         }
 
+        // POST: api/Accounts/login
         [AllowAnonymous]
         [HttpPost]
         [Route("login")]
@@ -40,6 +43,14 @@ namespace CloverClubRest.Controllers
             }
 
             IActionResult response = Unauthorized();
+
+            //Admin Login
+            if (login.Password.Equals(config["Admin:Pass"]) && login.Email.Equals(config["Admin:Email"]))
+            {
+                return Ok(new {token = BuildAdminToken()});
+            }
+
+            //User Login
             var user = Authenticate(login);
 
             if (user != null)
@@ -51,6 +62,7 @@ namespace CloverClubRest.Controllers
             return response;
         }
 
+        // POST: api/Accounts/register
         [AllowAnonymous]
         [HttpPost]
         [Route("register")]
@@ -82,7 +94,7 @@ namespace CloverClubRest.Controllers
             var claims = new[] {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.NameId, user.Name),
+                new Claim(JwtRegisteredClaimNames.GivenName, user.Name),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
@@ -94,6 +106,27 @@ namespace CloverClubRest.Controllers
                 claims,
                 //4 horas de duracion, como en la Graph API de Microsoft
                 expires: DateTime.Now.AddHours(4),
+                signingCredentials: creds);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private string BuildAdminToken()
+        {
+            var claims = new[] {
+                new Claim(JwtRegisteredClaimNames.Sub, "admin"),
+                new Claim(JwtRegisteredClaimNames.Email, "Admin"),
+                new Claim(JwtRegisteredClaimNames.GivenName, "Admin"),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(config["Jwt:Issuer"],
+                config["Jwt:Issuer"],
+                claims,
+                expires: DateTime.Now.AddMinutes(20),
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

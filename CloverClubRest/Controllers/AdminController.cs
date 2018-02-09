@@ -7,6 +7,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using CloverClubRest.Models;
 using CloverClubRest.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -20,10 +21,11 @@ namespace CloverClubRest.Controllers
 
         public const int PAGE_SIZE = 50;
 
-        public AdminController(IUsersRepository usersRepository) => this.usersRepository= usersRepository;
+        public AdminController(IUsersRepository usersRepository) => this.usersRepository = usersRepository;
 
-        // GET: api/Users
+        // GET: api/Admin
         [HttpGet]
+        [Authorize(Policy = "Admin")]
         public IEnumerable<User> Get(int? page)
         {
             int pagenum = page ?? 0;
@@ -34,8 +36,9 @@ namespace CloverClubRest.Controllers
             return users;
         }
 
-        // GET api/Users/5
+        // GET api/Admin/5
         [HttpGet("{id}")]
+        [Authorize(Policy = "Admin")]
         public IActionResult Get(int id)
         {
             var user = usersRepository.GetUserById(id);
@@ -45,8 +48,9 @@ namespace CloverClubRest.Controllers
                 return Ok(user);
         }
 
-        // POST api/Users
+        // POST api/Admin
         [HttpPost]
+        [Authorize(Policy = "Admin")]
         public IActionResult Post([FromBody]User user)
         {
             if (!ModelState.IsValid)
@@ -60,8 +64,9 @@ namespace CloverClubRest.Controllers
             return Ok(newUser);
         }
 
-        // PUT api/<controller>/5
+        // PUT api/Admin/5
         [HttpPut("{id}")]
+        [Authorize(Policy = "Admin")]
         public IActionResult Put(int id, [FromBody]User value)
         {
             if (!ModelState.IsValid)
@@ -81,8 +86,9 @@ namespace CloverClubRest.Controllers
             return Ok(newUser);
         }
 
-        // DELETE api/<controller>/5
+        // DELETE api/Admin/5
         [HttpDelete("{id}")]
+        [Authorize(Policy = "Admin")]
         public IActionResult Delete(int id)
         {
             bool deleted = usersRepository.DeleteUser(id);
