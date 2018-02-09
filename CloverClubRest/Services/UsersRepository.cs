@@ -15,23 +15,24 @@ namespace CloverClubRest.Services
 
         public IEnumerable<User> GetUsers()
         {
-            return _context.Users.ToList();
+            return _context.User.ToList();
         }
 
-        public User GetUserById(long userId)
+        public User GetUserById(int userId)
         {
-            return _context.Users.Find(userId);
+            return _context.User.Find(userId);
         }
 
-        public void InsertUser(User user)
+        public User InsertUser(User user)
         {
-            _context.Users.Add(user);
+            var newUser = _context.User.Add(user);
+            return newUser.Entity;
         }
 
-        public void DeleteUser(long userId)
+        public void DeleteUser(int userId)
         {
             var user = GetUserById(userId);
-            _context.Users.Remove(user);
+            _context.User.Remove(user);
 ;        }
 
         public void UpdateUser(User user)

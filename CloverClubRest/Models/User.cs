@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace CloverClubRest.Models
 {
@@ -11,9 +14,13 @@ namespace CloverClubRest.Models
             IngredientesFav = new HashSet<IngredienteFav>();
         }
 
-        public long Id { get; set; }
+        public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string Pass { get; set; }
+        [Required]
+        public string Email { get; set; }
 
         public ICollection<CoctelFav> CoctelesFav { get; set; }
         public ICollection<IngredienteFav> IngredientesFav { get; set; }

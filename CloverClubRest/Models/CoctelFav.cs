@@ -5,8 +5,8 @@ namespace CloverClubRest.Models
 {
     public partial class CoctelFav
     {
-        public long Userid { get; set; }
-        public long Coctelid { get; set; }
+        public int Userid { get; set; }
+        public int Coctelid { get; set; }
 
         public User User { get; set; }
     }

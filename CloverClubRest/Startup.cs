@@ -27,13 +27,10 @@ namespace CloverClubRest
         public void ConfigureServices(IServiceCollection services)
         {
             //MVC Services
-#if DEBUG
-            services.AddDbContext<UsersContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("UsersDBLocal")));
-#else
+
             services.AddDbContext<UsersContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("UsersDB")));
-#endif
+
             services.AddMvc();
 
             //User Services

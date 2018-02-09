@@ -16,6 +16,8 @@ namespace CloverClubRest.Controllers
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
+        //TODO email distinto
+
         private IUsersRepository usersRepository;
 
         public const int PAGE_SIZE = 25;
@@ -45,11 +47,19 @@ namespace CloverClubRest.Controllers
                 return Ok(user);
         }
 
-        // POST api/<controller>
+        // POST api/Users
         [HttpPost]
-        public string Post([FromBody]string value)
+        public IActionResult Post([FromBody]User user)
         {
-            return "test";
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new {ErrorMsg = "No se ha proporcionado un usuario valido"});
+            }
+
+            var newUser = usersRepository.InsertUser(user);
+            usersRepository.Save();
+
+            return Ok(newUser);
         }
 
         // PUT api/<controller>/5

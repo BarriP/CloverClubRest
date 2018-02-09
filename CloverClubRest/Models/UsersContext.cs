@@ -6,9 +6,9 @@ namespace CloverClubRest.Models
 {
     public partial class UsersContext : DbContext
     {
-        public virtual DbSet<CoctelFav> CoctelesFav { get; set; }
-        public virtual DbSet<IngredienteFav> IngredientesFav { get; set; }
-        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<CoctelFav> CocteleFav { get; set; }
+        public virtual DbSet<IngredienteFav> IngredienteFav { get; set; }
+        public virtual DbSet<User> User { get; set; }
 
         public UsersContext(DbContextOptions options) : base(options) { }
 
@@ -45,8 +45,7 @@ namespace CloverClubRest.Models
             modelBuilder.Entity<User>(entity =>
             {
                 entity.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .ValueGeneratedNever();
+                    .HasColumnName("ID");
 
                 entity.Property(e => e.Name)
                     .IsRequired()

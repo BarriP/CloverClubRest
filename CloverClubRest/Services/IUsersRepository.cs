@@ -9,9 +9,9 @@ namespace CloverClubRest.Services
     public interface IUsersRepository : IDisposable
     {
         IEnumerable<User> GetUsers();
-        User GetUserById(long userId);
-        void InsertUser(User user);
-        void DeleteUser(long userId);
+        User GetUserById(int userId);
+        User InsertUser(User user);
+        void DeleteUser(int userId);
         void UpdateUser(User user);
         void Save();
     }
