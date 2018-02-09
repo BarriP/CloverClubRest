@@ -29,15 +29,21 @@ namespace CloverClubRest.Services
             return newUser.Entity;
         }
 
-        public void DeleteUser(int userId)
+        public bool DeleteUser(int userId)
         {
             var user = GetUserById(userId);
+            if (user == null)
+                return false;
             _context.User.Remove(user);
+            return true;
 ;        }
 
-        public void UpdateUser(User user)
+        public User UpdateUser(User user)
         {
+            if (GetUserById(user.Id) == null)
+                return null;
             _context.Entry(user).State = EntityState.Modified;
+            return user;
         }
 
         public void Save()

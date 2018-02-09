@@ -11,8 +11,8 @@ namespace CloverClubRest.Services
         IEnumerable<User> GetUsers();
         User GetUserById(int userId);
         User InsertUser(User user);
-        void DeleteUser(int userId);
-        void UpdateUser(User user);
+        bool DeleteUser(int userId);
+        User UpdateUser(User user);
         void Save();
     }
 }

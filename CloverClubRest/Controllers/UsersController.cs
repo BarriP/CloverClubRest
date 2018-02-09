@@ -64,16 +64,38 @@ namespace CloverClubRest.Controllers
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public string Put(int id, [FromBody]string value)
+        public IActionResult Put(int id, [FromBody]User value)
         {
-            return "test";
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { ErrorMsg = "No se ha proporcionado un usuario valido" });
+            }
+
+            value.Id = id;
+
+            var newUser = usersRepository.UpdateUser(value);
+
+            if(newUser == null)
+                return NotFound(new { ErrorMsg = "No existe usuario con id [" + id + "]" });
+
+            usersRepository.Save();
+
+            return Ok(newUser);
         }
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public string Delete(int id)
+        public IActionResult Delete(int id)
         {
-            return "test";
+            bool deleted = usersRepository.DeleteUser(id);
+
+            if (deleted)
+            {
+                usersRepository.Save();
+                return Ok(new {ErrorMsg = "Usuario [" + id + "] borrado"});
+            }
+            else
+                return NotFound(new {ErrorMsg = "No existe usuario con id [" + id + "]"});
         }
 
         protected override void Dispose(bool disposing)
