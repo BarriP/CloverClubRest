@@ -14,15 +14,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace CloverClubRest.Controllers
 {
     [Route("api/[controller]")]
-    public class UsersController : Controller
+    public class AdminController : Controller
     {
-        //TODO email distinto
-
         private IUsersRepository usersRepository;
 
-        public const int PAGE_SIZE = 25;
+        public const int PAGE_SIZE = 50;
 
-        public UsersController(IUsersRepository usersRepository) => this.usersRepository= usersRepository;
+        public AdminController(IUsersRepository usersRepository) => this.usersRepository= usersRepository;
 
         // GET: api/Users
         [HttpGet]

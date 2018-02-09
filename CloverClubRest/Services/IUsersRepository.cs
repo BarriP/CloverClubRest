@@ -13,6 +13,7 @@ namespace CloverClubRest.Services
         User InsertUser(User user);
         bool DeleteUser(int userId);
         User UpdateUser(User user);
+        User FindByEmail(string email);
         void Save();
     }
 }

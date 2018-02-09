@@ -46,6 +46,11 @@ namespace CloverClubRest.Services
             return user;
         }
 
+        public User FindByEmail(string email)
+        {
+            return _context.User.FirstOrDefault(u => u.Email.Equals(email));
+        }
+
         public void Save()
         {
             _context.SaveChanges();

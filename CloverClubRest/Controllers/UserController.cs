@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CloverClubRest.Controllers
 {
     [Route("api/[controller]")]
-    public class FavoritesController : Controller
+    public class UserController : Controller
     {
         // GET: api/Favorites/Coctel
         [HttpGet("/Coctel")]
