@@ -6,6 +6,7 @@ using CloverClubRest.Models;
 using CloverClubRest.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,12 +17,14 @@ namespace CloverClubRest
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            Environment = env;
         }
 
         public IConfiguration Configuration { get; }
+        private IHostingEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -35,6 +38,19 @@ namespace CloverClubRest
 
             //User Services
             services.AddTransient<IUsersRepository, UsersRepository>();
+
+            //Secure
+            var skipSSL = Configuration.GetValue<bool>("LocalTest:skipSSL");
+            // requires using Microsoft.AspNetCore.Mvc;
+            services.Configure<MvcOptions>(options =>
+            {
+                // Set LocalTest:skipSSL to true to skip SSL requrement in 
+                // debug mode. This is useful when not using Visual Studio.
+                if (Environment.IsDevelopment() && !skipSSL)
+                {
+                    options.Filters.Add(new RequireHttpsAttribute());
+                }
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

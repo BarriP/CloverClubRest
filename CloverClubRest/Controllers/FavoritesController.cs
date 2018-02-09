@@ -11,35 +11,43 @@ namespace CloverClubRest.Controllers
     [Route("api/[controller]")]
     public class FavoritesController : Controller
     {
-        // GET: api/<controller>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        // GET: api/Favorites/Coctel
+        [HttpGet("/Coctel")]
+        public IEnumerable<string> GetCoctels()
         {
-            return new string[] { "value1", "value2" };
+            return null;
         }
 
-        // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // POST api/Favorites/Coctel
+        [HttpPost("/Coctel")]
+        public void PostCoctel([FromBody]int value)
         {
-            return "value";
+
         }
 
-        // POST api/<controller>
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        // DELETE api/Favorites/Coctel/2
+        [HttpDelete("/Coctel/{id}")]
+        public void DeleteCoctel(int id)
         {
         }
 
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // GET: api/Favorites/Ingredient
+        [HttpGet("/Ingredient")]
+        public IEnumerable<string> GetIngredients()
+        {
+            return null;
+        }
+
+        // POST api/Favorites/Ingredient
+        [HttpPost("/Ingredient")]
+        public void PostIngredient([FromBody]int value)
+        {
+
+        }
+
+        // DELETE api/Favorites/Ingredient/2
+        [HttpDelete("/Ingredient/{id}")]
+        public void DeleteIngredient(int id)
         {
         }
     }
