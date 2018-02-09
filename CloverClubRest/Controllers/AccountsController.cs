@@ -31,7 +31,7 @@ namespace CloverClubRest.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        [Route("/login")]
+        [Route("login")]
         public IActionResult Login([FromBody]LoginModel login)
         {
             if (!ModelState.IsValid)
@@ -53,7 +53,7 @@ namespace CloverClubRest.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        [Route("/register")]
+        [Route("register")]
         public IActionResult Register([FromBody] RegisterModel register)
         {
             if (!ModelState.IsValid)
