@@ -17,57 +17,102 @@ namespace CloverClubRest.Controllers
     {
         private IUsersRepository userRepository;
 
-        public UserController(IUsersRepository repo)
-        {
-            this.userRepository = repo;
-        }
+        public UserController(IUsersRepository repo) => this.userRepository = repo;
 
+        // GET: api/User
         [HttpGet]
         [Authorize("User")]
-        public User Get()
+        public User Get() => GetUser(HttpContext.User);
+
+        // DELETE api/User
+        [HttpDelete]
+        [Authorize("User")]
+        public IActionResult Delete()
         {
-            return GetUser(HttpContext.User);
+            var user = GetUser(HttpContext.User);
+            userRepository.DeleteUser(user.Id);
+            userRepository.Save();
+
+            return Ok(new { ErrorMsg = "Usuario [" + user.Id + "] borrado" });
         }
 
-        // GET: api/Favorites/Coctel
-        [HttpGet("/Coctel")]
-        public IEnumerable<string> GetCoctels()
+        // PUT api/User
+        [HttpPut]
+        [Authorize("User")]
+        public IActionResult Put([FromBody] User newUser)
         {
-            return null;
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { ErrorMsg = "No se ha proporcionado un usuario valido" });
+            }
+
+            var user = GetUser(HttpContext.User);
+            newUser.Id = user.Id;
+            var updatedUser = userRepository.UpdateUser(newUser);
+
+            return Ok(updatedUser);
         }
 
-        // POST api/Favorites/Coctel
-        [HttpPost("/Coctel")]
-        public void PostCoctel([FromBody]int value)
-        {
+        // GET api/User/coctel
+        [HttpGet]
+        [Authorize("User")]
+        [Route("coctel")]
+        public IEnumerable<int> GetCoctels() => GetUser(HttpContext.User).CoctelesFavList;
 
+        // GET: api/User/ingrediente
+        [HttpGet]
+        [Authorize("User")]
+        [Route("ingrediente")]
+        public IEnumerable<int> GetIngredients() => GetUser(HttpContext.User).IngredientesFavList;
+
+
+
+
+
+
+
+
+
+
+        // PUT api/User/coctel
+        [HttpPut]
+        [Authorize("User")]
+        [Route("coctel")]
+        public void AddCoctel([FromBody]int value)
+        {
+            var user = GetUser(HttpContext.User);
         }
+
+
+
+
+
+
+
+
+
 
         // DELETE api/Favorites/Coctel/2
         [HttpDelete("/Coctel/{id}")]
         public void DeleteCoctel(int id)
         {
-        }
-
-        // GET: api/Favorites/Ingredient
-        [HttpGet("/Ingredient")]
-        public IEnumerable<string> GetIngredients()
-        {
-            return null;
+            var user = GetUser(HttpContext.User);
         }
 
         // POST api/Favorites/Ingredient
         [HttpPost("/Ingredient")]
-        public void PostIngredient([FromBody]int value)
+        public void AddIngredient([FromBody]int value)
         {
-
+            var user = GetUser(HttpContext.User);
         }
 
         // DELETE api/Favorites/Ingredient/2
         [HttpDelete("/Ingredient/{id}")]
         public void DeleteIngredient(int id)
         {
+            var user = GetUser(HttpContext.User);
         }
+
         private User GetUser(ClaimsPrincipal user)
         {
             string textId = user.FindFirst(claim => claim.Type == ClaimTypes.NameIdentifier).Value;

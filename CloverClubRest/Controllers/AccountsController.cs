@@ -85,6 +85,7 @@ namespace CloverClubRest.Controllers
                 Pass = register.Pass,
                 Email = register.Email,
             });
+            usersRepository.Save();
 
             return Ok(user);
         }

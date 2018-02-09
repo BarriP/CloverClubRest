@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace CloverClubRest.Models
@@ -24,5 +25,17 @@ namespace CloverClubRest.Models
 
         public ICollection<CoctelFav> CoctelesFav { get; set; }
         public ICollection<IngredienteFav> IngredientesFav { get; set; }
+
+        [NotMapped]
+        public IEnumerable<int> CoctelesFavList
+        {
+            get { return CoctelesFav.Select(c => c.Coctelid); }
+        }
+
+        [NotMapped]
+        public IEnumerable<int> IngredientesFavList
+        {
+            get { return IngredientesFav.Select(i => i.Ingredienteid); }
+        }
     }
 }
