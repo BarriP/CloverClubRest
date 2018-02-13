@@ -53,17 +53,17 @@ namespace CloverClubRest.Controllers
             return Ok(updatedUser);
         }
 
-        // GET api/User/coctel
+        // GET api/User/cocteles
         [HttpGet]
         [Authorize("User")]
-        [Route("coctel")]
+        [Route("cocteles")]
         public IEnumerable<int> GetCoctels() => GetUser(HttpContext.User).CoctelesFavList;
 
-        // GET: api/User/ingrediente
+        // GET: api/User/ingredientes
         [HttpGet]
         [Authorize("User")]
-        [Route("ingrediente")]
-        public IEnumerable<int> GetIngredients() => GetUser(HttpContext.User).IngredientesFavList;
+        [Route("ingredientes")]
+        public IEnumerable<string> GetIngredients() => GetUser(HttpContext.User).IngredientesFavList;
 
 
 
@@ -74,10 +74,10 @@ namespace CloverClubRest.Controllers
 
 
 
-        // PUT api/User/coctel
+        // PUT api/User/cocteles
         [HttpPut]
         [Authorize("User")]
-        [Route("coctel")]
+        [Route("cocteles")]
         public void AddCoctel([FromBody]int value)
         {
             var user = GetUser(HttpContext.User);

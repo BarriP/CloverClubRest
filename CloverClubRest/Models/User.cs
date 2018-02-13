@@ -17,10 +17,13 @@ namespace CloverClubRest.Models
 
         public int Id { get; set; }
         [Required]
+        [MinLength(3)]
         public string Name { get; set; }
         [Required]
+        [MinLength(3)]
         public string Pass { get; set; }
         [Required]
+        [MinLength(3)]
         public string Email { get; set; }
 
         public ICollection<CoctelFav> CoctelesFav { get; set; }
@@ -33,9 +36,9 @@ namespace CloverClubRest.Models
         }
 
         [NotMapped]
-        public IEnumerable<int> IngredientesFavList
+        public IEnumerable<string> IngredientesFavList
         {
-            get { return IngredientesFav.Select(i => i.Ingredienteid); }
+            get { return IngredientesFav.Select(i => i.Ingrediente); }
         }
     }
 }

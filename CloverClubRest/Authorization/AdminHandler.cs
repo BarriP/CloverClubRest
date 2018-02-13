@@ -17,4 +17,6 @@ namespace CloverClubRest.Authorization
             return Task.CompletedTask;
         }
     }
+
+    public class AdminRequirement : IAuthorizationRequirement { }
 }

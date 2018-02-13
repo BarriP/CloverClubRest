@@ -23,8 +23,8 @@ namespace CloverClubRest.Controllers
 
         public AdminController(IUsersRepository usersRepository) => this.usersRepository = usersRepository;
 
-        // GET: api/Admin
-        [HttpGet]
+        // GET: api/Admin/Users
+        [HttpGet("Users")]
         [Authorize(Policy = "Admin")]
         public IEnumerable<User> Get(int? page)
         {
@@ -36,20 +36,19 @@ namespace CloverClubRest.Controllers
             return users;
         }
 
-        // GET api/Admin/5
-        [HttpGet("{id}")]
+        // GET api/Admin/Users/5
+        [HttpGet("Users/{id}")]
         [Authorize(Policy = "Admin")]
         public IActionResult Get(int id)
         {
             var user = usersRepository.GetUserById(id);
             if (user == null)
                 return NotFound(new {ErrorMsg = "User with ID [" + id + "] not found"});
-            else
-                return Ok(user);
+            return Ok(user);
         }
 
-        // POST api/Admin
-        [HttpPost]
+        // POST api/Admin/Users
+        [HttpPost("Users")]
         [Authorize(Policy = "Admin")]
         public IActionResult Post([FromBody]User user)
         {
@@ -64,8 +63,8 @@ namespace CloverClubRest.Controllers
             return Ok(newUser);
         }
 
-        // PUT api/Admin/5
-        [HttpPut("{id}")]
+        // PUT api/Admin/Users/5
+        [HttpPut("Users/{id}")]
         [Authorize(Policy = "Admin")]
         public IActionResult Put(int id, [FromBody]User value)
         {
@@ -86,20 +85,18 @@ namespace CloverClubRest.Controllers
             return Ok(newUser);
         }
 
-        // DELETE api/Admin/5
-        [HttpDelete("{id}")]
+        // DELETE api/Admin/Users/5
+        [HttpDelete("Users/{id}")]
         [Authorize(Policy = "Admin")]
         public IActionResult Delete(int id)
         {
             bool deleted = usersRepository.DeleteUser(id);
 
-            if (deleted)
-            {
-                usersRepository.Save();
-                return Ok(new {ErrorMsg = "Usuario [" + id + "] borrado"});
-            }
-            else
-                return NotFound(new {ErrorMsg = "No existe usuario con id [" + id + "]"});
+            if (!deleted) return NotFound(new {ErrorMsg = "No existe usuario con id [" + id + "]"});
+
+            usersRepository.Save();
+            return Ok(new {ErrorMsg = "Usuario [" + id + "] borrado"});
+
         }
 
         protected override void Dispose(bool disposing)

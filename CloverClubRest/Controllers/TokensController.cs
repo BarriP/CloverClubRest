@@ -20,18 +20,18 @@ namespace CloverClubRest.Controllers
     //TODO SALT
 
     [Route("api/[controller]")]
-    public class AccountsController : Controller
+    public class TokensController : Controller
     {
         private IUsersRepository usersRepository;
         private IConfiguration config;
 
-        public AccountsController(IUsersRepository repo, IConfiguration configuration)
+        public TokensController(IUsersRepository repo, IConfiguration configuration)
         {
             usersRepository = repo;
             config = configuration;
         }
 
-        // POST: api/Accounts/login
+        // POST: api/Tokens/login
         [AllowAnonymous]
         [HttpPost]
         [Route("login")]
@@ -62,7 +62,7 @@ namespace CloverClubRest.Controllers
             return response;
         }
 
-        // POST: api/Accounts/register
+        // POST: api/Tokens/register
         [AllowAnonymous]
         [HttpPost]
         [Route("register")]
@@ -79,7 +79,7 @@ namespace CloverClubRest.Controllers
                 return BadRequest(new {ErrorMsg = "El email ya existe"});
             }
 
-            var user = usersRepository.InsertUser(new User()
+            var user = usersRepository.InsertUser(new User
             {
                 Name = register.Name,
                 Pass = register.Pass,

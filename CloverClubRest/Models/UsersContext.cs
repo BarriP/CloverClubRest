@@ -30,11 +30,11 @@ namespace CloverClubRest.Models
 
             modelBuilder.Entity<IngredienteFav>(entity =>
             {
-                entity.HasKey(e => new { e.Userid, e.Ingredienteid });
+                entity.HasKey(e => new { e.Userid, e.Ingrediente });
 
                 entity.Property(e => e.Userid).HasColumnName("USERID");
 
-                entity.Property(e => e.Ingredienteid).HasColumnName("INGREDIENTEID");
+                entity.Property(e => e.Ingrediente).HasColumnName("INGREDIENTEID");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.IngredientesFav)
