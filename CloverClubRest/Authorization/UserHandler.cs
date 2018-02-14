@@ -11,7 +11,12 @@ namespace CloverClubRest.Authorization
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, UserRequirement requirement)
         {
-            if (!context.User.HasClaim(claim => claim.Type.Equals(ClaimTypes.NameIdentifier) && claim.Value == "admin"))
+            if(!context.User.HasClaim(claim => claim.Type.Equals(ClaimTypes.NameIdentifier)))
+            {
+                return Task.CompletedTask;
+            }
+
+            if (!context.User.HasClaim(claim => claim.Type.Equals(ClaimTypes.NameIdentifier) && claim.Value.Equals("admin")))
             {
                 context.Succeed(requirement);
             }

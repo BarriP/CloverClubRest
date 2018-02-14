@@ -15,5 +15,10 @@ namespace CloverClubRest.Services
         User UpdateUser(User user);
         User FindByEmail(string email);
         void Save();
+
+        bool AddCoctelFav(User user, int id);
+        bool AddIngredienteFav(User user, string ing);
+        bool RemoveCoctelFav(User user, int id);
+        bool RemoveIngredienteFav(User user, string ing);
     }
 }

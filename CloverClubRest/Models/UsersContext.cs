@@ -6,7 +6,7 @@ namespace CloverClubRest.Models
 {
     public partial class UsersContext : DbContext
     {
-        public virtual DbSet<CoctelFav> CocteleFav { get; set; }
+        public virtual DbSet<CoctelFav> CoctelFav { get; set; }
         public virtual DbSet<IngredienteFav> IngredienteFav { get; set; }
         public virtual DbSet<User> User { get; set; }
 

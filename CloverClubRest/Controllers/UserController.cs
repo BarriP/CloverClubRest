@@ -33,7 +33,7 @@ namespace CloverClubRest.Controllers
             userRepository.DeleteUser(user.Id);
             userRepository.Save();
 
-            return Ok(new { ErrorMsg = "Usuario [" + user.Id + "] borrado" });
+            return Ok(new {ErrorMsg = "Usuario [" + user.Id + "] borrado"});
         }
 
         // PUT api/User
@@ -42,9 +42,7 @@ namespace CloverClubRest.Controllers
         public IActionResult Put([FromBody] User newUser)
         {
             if (!ModelState.IsValid)
-            {
-                return BadRequest(new { ErrorMsg = "No se ha proporcionado un usuario valido" });
-            }
+                return BadRequest(new {ErrorMsg = "No se ha proporcionado un usuario valido"});
 
             var user = GetUser(HttpContext.User);
             newUser.Id = user.Id;
@@ -65,62 +63,79 @@ namespace CloverClubRest.Controllers
         [Route("ingredientes")]
         public IEnumerable<string> GetIngredients() => GetUser(HttpContext.User).IngredientesFavList;
 
-
-
-
-
-
-
-
-
-
-        // PUT api/User/cocteles
-        [HttpPut]
+        // POST api/User/cocteles
+        [HttpPost]
         [Authorize("User")]
         [Route("cocteles")]
-        public void AddCoctel([FromBody]int value)
+        public IActionResult AddCoctel([FromBody] int? coctelId)
         {
+            if (coctelId == null)
+                return BadRequest(new {ErrorMsg = "No se ha proporcionado un coctel valido"});
+
             var user = GetUser(HttpContext.User);
+
+            if (!userRepository.AddCoctelFav(user, coctelId.Value))
+                return BadRequest(new {ErrorMsg = $"Coctel [{coctelId}] ya existe"});
+
+            userRepository.Save();
+            return Ok(new {Msg = $"Coctel [{coctelId}] añadido"});
+
         }
 
-
-
-
-
-
-
-
-
-
-        // DELETE api/Favorites/Coctel/2
-        [HttpDelete("/Coctel/{id}")]
-        public void DeleteCoctel(int id)
+        // POST api/User/ingredientes
+        [HttpPost]
+        [Authorize("User")]
+        [Route("ingredientes")]
+        public IActionResult AddIngredient([FromBody] string ingredienteId)
         {
+            if (String.IsNullOrEmpty(ingredienteId))
+                return BadRequest(new { ErrorMsg = "No se ha proporcionado un coctel valido" });
+
             var user = GetUser(HttpContext.User);
+
+            if (!userRepository.AddIngredienteFav(user, ingredienteId))
+                return BadRequest(new {ErrorMsg = $"Ingrediente [{ingredienteId}] ya existe"});
+
+            userRepository.Save();
+            return Ok(new { Msg = $"Ingrediente [{ingredienteId}] añadido" });
+
         }
 
-        // POST api/Favorites/Ingredient
-        [HttpPost("/Ingredient")]
-        public void AddIngredient([FromBody]int value)
+        // DELETE api/User/cocteles/2
+        [HttpDelete]
+        [Authorize("User")]
+        [Route("cocteles/{id}")]
+        public IActionResult DeleteCoctel(int id)
         {
             var user = GetUser(HttpContext.User);
+
+            if (!userRepository.RemoveCoctelFav(user, id))
+                return NotFound(new { ErrorMsg = $"Coctel [{id}] no existe" });
+
+            userRepository.Save();
+            return Ok(new { Msg = $"Coctel [{id}] borrado" });
         }
 
-        // DELETE api/Favorites/Ingredient/2
-        [HttpDelete("/Ingredient/{id}")]
-        public void DeleteIngredient(int id)
+        // DELETE api/User/ingredientes/2
+        [HttpDelete]
+        [Authorize("User")]
+        [Route("ingredientes/{ingrediente}")]
+        public IActionResult DeleteIngredient(string ingrediente)
         {
             var user = GetUser(HttpContext.User);
+
+            if (!userRepository.RemoveIngredienteFav(user, ingrediente))
+                return NotFound(new { ErrorMsg = $"Coctel [{ingrediente}] no existe" });
+
+            userRepository.Save();
+            return Ok(new { Msg = $"Ingrediente [{ingrediente}] borrado" });
         }
 
         private User GetUser(ClaimsPrincipal user)
         {
             string textId = user.FindFirst(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 
-            if (Int32.TryParse(textId, out int id))
-                return userRepository.GetUserById(id);
-            else
-                return null;
+            return int.TryParse(textId, out int id) ? userRepository.GetUserById(id) : null;
         }
     }
 }
