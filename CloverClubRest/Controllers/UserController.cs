@@ -22,7 +22,11 @@ namespace CloverClubRest.Controllers
         // GET: api/User
         [HttpGet]
         [Authorize("User")]
-        public User Get() => GetUser(HttpContext.User);
+        public IActionResult Get()
+        {
+            var user = GetUser(HttpContext.User);
+            return Ok(user);
+        }
 
         // DELETE api/User
         [HttpDelete]

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Newtonsoft.Json;
 
 namespace CloverClubRest.Models
 {
@@ -26,15 +27,19 @@ namespace CloverClubRest.Models
         [MinLength(3)]
         public string Email { get; set; }
 
+        [JsonIgnore]
         public ICollection<CoctelFav> CoctelesFav { get; set; }
+        [JsonIgnore]
         public ICollection<IngredienteFav> IngredientesFav { get; set; }
 
+        
         [NotMapped]
         public IEnumerable<int> CoctelesFavList
         {
             get { return CoctelesFav.Select(c => c.Coctelid); }
         }
 
+        
         [NotMapped]
         public IEnumerable<string> IngredientesFavList
         {
