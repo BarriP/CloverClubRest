@@ -82,7 +82,7 @@ namespace CloverClubRest.Controllers
             var user = usersRepository.InsertUser(new User
             {
                 Name = register.Name,
-                Pass = register.Pass,
+                Pass = register.Password,
                 Email = register.Email,
             });
             usersRepository.Save();
@@ -162,7 +162,7 @@ namespace CloverClubRest.Controllers
             public string Email { get; set; }
             [Required]
             [MinLength(3)]
-            public string Pass { get; set; }
+            public string Password { get; set; }
         }
     }
 }
