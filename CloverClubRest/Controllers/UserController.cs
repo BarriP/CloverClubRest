@@ -93,7 +93,7 @@ namespace CloverClubRest.Controllers
         public IActionResult AddIngredient([FromBody] string ingredienteId)
         {
             if (String.IsNullOrEmpty(ingredienteId))
-                return BadRequest(new { ErrorMsg = "No se ha proporcionado un coctel valido" });
+                return BadRequest(new { ErrorMsg = "No se ha proporcionado un ingrediente valido" });
 
             var user = GetUser(HttpContext.User);
 
@@ -129,7 +129,7 @@ namespace CloverClubRest.Controllers
             var user = GetUser(HttpContext.User);
 
             if (!userRepository.RemoveIngredienteFav(user, ingrediente))
-                return NotFound(new { ErrorMsg = $"Coctel [{ingrediente}] no existe" });
+                return NotFound(new { ErrorMsg = $"Ingrediente [{ingrediente}] no existe" });
 
             userRepository.Save();
             return Ok(new { Msg = $"Ingrediente [{ingrediente}] borrado" });
