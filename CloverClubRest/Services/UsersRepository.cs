@@ -13,11 +13,11 @@ namespace CloverClubRest.Services
 
         public UsersRepository(UsersContext ctx) => _context = ctx;
 
-        public IEnumerable<User> GetUsers() => _context.User.Include(u => u.CoctelesFav).ThenInclude(u => u.User.IngredientesFav).ToList();
+        public IEnumerable<User> GetUsers() => _context.User.Include(u => u.CoctelesFav).Include(u => u.IngredientesFav).ToList();
 
-        public User FindByEmail(string email) => _context.User.Include(u => u.CoctelesFav).ThenInclude(u => u.User.IngredientesFav).FirstOrDefault(u => u.Email.Equals(email));
+        public User FindByEmail(string email) => _context.User.Include(u => u.CoctelesFav).Include(u => u.IngredientesFav).FirstOrDefault(u => u.Email.Equals(email));
 
-        public User GetUserById(int userId) => _context.User.Include(u => u.CoctelesFav).ThenInclude(u => u.User.IngredientesFav).FirstOrDefault(u => u.Id == userId);
+        public User GetUserById(int userId) => _context.User.Include(u => u.CoctelesFav).Include(u => u.IngredientesFav).FirstOrDefault(u => u.Id == userId);
 
         public User InsertUser(User user)
         {
